@@ -26,7 +26,7 @@ class _DiceRollerState extends State<DiceRoller>
       duration: const Duration(milliseconds: 500),
     );
 
-    _animation = Tween<double>(begin: 0, end: 2 * pi).animate(_controller);
+    _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
 
     _controller.addListener(() {
       setState(() {});
@@ -60,8 +60,12 @@ class _DiceRollerState extends State<DiceRoller>
         AnimatedBuilder(
           animation: _controller,
           builder: (BuildContext context, Widget? child) {
-            return Transform.rotate(
-              angle: _animation.value,
+            final angle = _animation.value * pi;
+            final rotationTransform = Matrix4.rotationY(angle);
+
+            return Transform(
+              transform: rotationTransform,
+              alignment: Alignment.center,
               child: Image.asset(
                 'assets/images/dice-${_currentDiceRoll.toString()}.png',
                 width: 200,
